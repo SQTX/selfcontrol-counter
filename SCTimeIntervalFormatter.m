@@ -49,6 +49,15 @@
                                                   NSCalendarUnitMinute);
         timeIntervalFormatter.numberOfSignificantUnits = 0;
         timeIntervalFormatter.leastSignificantUnit = NSCalendarUnitMinute;
+
+        // FormatterKit loads these format strings from its (localization-pruned)
+        // bundle and can leave them nil for unsupported locales (e.g. when
+        // AppleLanguages contains pl/nb), which crashes stringWithFormat: with a
+        // "nil argument" exception. Force safe, locale-independent defaults.
+        timeIntervalFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier: @"en_US_POSIX"];
+        timeIntervalFormatter.suffixExpressionFormat = @"%@ %@";
+        timeIntervalFormatter.deicticExpressionFormat = @"%@%@";
+        timeIntervalFormatter.approximateQualifierFormat = @"%@";
     }
     
     NSString* formatted = [timeIntervalFormatter stringForTimeInterval:seconds];
