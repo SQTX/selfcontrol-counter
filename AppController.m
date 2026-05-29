@@ -327,7 +327,9 @@
         return;
     }
 
-    if (blockIsOn && [defaults_ boolForKey: @"ShowMenubarTimer"]) {
+    // Show the status item whenever the preference is on — just the app icon
+    // when no block is active, icon + countdown while a block is running.
+    if ([defaults_ boolForKey: @"ShowMenubarTimer"]) {
         [menubarTimer_ show];
     } else {
         [menubarTimer_ hide];

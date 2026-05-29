@@ -60,7 +60,13 @@
     }
 
     NSTimeInterval remaining = (endDate != nil) ? [endDate timeIntervalSinceNow] : 0;
-    self.statusItem.button.title = [SCMenubarTimer displayStringForSecondsRemaining: remaining];
+    // While a block is counting down, show the time; otherwise show just the
+    // app icon (no text).
+    if (remaining > 0) {
+        self.statusItem.button.title = [SCMenubarTimer displayStringForSecondsRemaining: remaining];
+    } else {
+        self.statusItem.button.title = @"";
+    }
 }
 
 - (NSImage*)menubarIcon {
