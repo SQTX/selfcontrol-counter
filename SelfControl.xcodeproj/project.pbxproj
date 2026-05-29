@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		009059F3144A2559F9B7C450 /* SCMenubarTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 634AFFB40CBDA7CAB8715B8B /* SCMenubarTimer.m */; };
+		12F5C3043CF123EA39E02E0F /* TemplateIcon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBD4848619D7611F0020F949 /* TemplateIcon2x.png */; };
 		5E6BEEBB5C6E29DADDB344CF /* libPods-selfcontrol-cli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C85A094F15E20A0DB58665A8 /* libPods-selfcontrol-cli.a */; };
 		63BAC9E58A69B15D342B0E29 /* libPods-org.eyebeam.selfcontrold.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BF3973D41997900DF147B24 /* libPods-org.eyebeam.selfcontrold.a */; };
 		8CA8987104D2956493D6AF6B /* Pods_SelfControl_SelfControlTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41DEF1E3926B4CF3AE2B76C /* Pods_SelfControl_SelfControlTests.framework */; };
@@ -3412,6 +3413,7 @@
 				CB0385E119D77051004614B6 /* PreferencesAdvancedViewController.xib in Resources */,
 				CB1B44BE23B7F1ED00EBA087 /* cheater-background.png in Resources */,
 				CB1465C425B0285300130D2E /* SCError.strings in Resources */,
+				12F5C3043CF123EA39E02E0F /* TemplateIcon2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
