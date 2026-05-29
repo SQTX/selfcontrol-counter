@@ -16,9 +16,20 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Tfc-ma-8Pt" customClass="SUUpdater"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="198"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="224"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mbT-01-aaa">
+                    <rect key="frame" x="18" y="188" width="444" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Show countdown in menu bar" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="mbT-02-bbb">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="4wD-T6-SpY" name="value" keyPath="values.ShowMenubarTimer" id="mbT-03-ccc"/>
+                    </connections>
+                </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RmI-NP-U9P">
                     <rect key="frame" x="18" y="53" width="444" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

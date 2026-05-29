@@ -31,6 +31,7 @@
 #import "SCXPCClient.h"
 #import "SCBlockFileReaderWriter.h"
 #import "SCUIUtilities.h"
+#import "SCMenubarTimer.h"
 #import <TransformerKit/NSValueTransformer+TransformerKit.h>
 
 @interface AppController () {}
@@ -268,6 +269,8 @@
     editBlocklistButton_.title = editListString;
     editBlocklistMenuItem_.title = editListString;
 
+    [self updateMenubarTimerVisibility];
+
 	[refreshUILock_ unlock];
 }
 
@@ -315,6 +318,35 @@
 	timerWindowController_ = nil;
 }
 
+- (void)updateMenubarTimerVisibility {
+    // UI updates are for the main thread only
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateMenubarTimerVisibility];
+        });
+        return;
+    }
+
+    // Show the status item whenever the preference is on — just the app icon
+    // when no block is active, icon + countdown while a block is running.
+    if ([defaults_ boolForKey: @"ShowMenubarTimer"]) {
+        [menubarTimer_ show];
+    } else {
+        [menubarTimer_ hide];
+    }
+}
+
+- (void)menubarTimerClicked:(id)sender {
+    [NSApp activateIgnoringOtherApps: YES];
+    // While a block is running, show the countdown timer window; otherwise show
+    // the normal initial window with the duration slider (not the "Finishing" timer).
+    if ([SCUIUtilities blockIsRunning]) {
+        [self showTimerWindow];
+    } else {
+        [initialWindow_ makeKeyAndOrderFront: self];
+    }
+}
+
 - (IBAction)openPreferences:(id)sender {
     [SCSentry addBreadcrumb: @"Opening preferences window" category: @"app"];
 	if (preferencesWindowController_ == nil) {
@@ -338,8 +370,12 @@
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    // For test runs, we don't want to pop up the dialog to move to the Applications folder, as it breaks the tests
-    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] == nil) {
+    // For test runs, we don't want to pop up the dialog to move to the Applications folder, as it breaks the tests.
+    // We also skip it for local dev builds running out of DerivedData, where moving + relaunching detaches the
+    // debugger and looks like a hang/crash.
+    NSString* bundlePath = NSBundle.mainBundle.bundlePath;
+    BOOL runningFromBuildDir = [bundlePath containsString: @"/DerivedData/"] || [bundlePath containsString: @"/Build/Products/"];
+    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] == nil && !runningFromBuildDir) {
         PFMoveToApplicationsFolderIfNecessary();
     }
 }
@@ -417,8 +453,16 @@
     
     blocklistTeaserLabel_.stringValue = [SCUIUtilities blockTeaserStringWithMaxLength: 60];
 
+	// Create the menu bar countdown timer and keep it in sync with the prefs toggle
+	menubarTimer_ = [[SCMenubarTimer alloc] initWithTarget: self
+	                                                action: @selector(menubarTimerClicked:)];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+	                                         selector: @selector(updateMenubarTimerVisibility)
+	                                             name: NSUserDefaultsDidChangeNotification
+	                                           object: nil];
+
 	[self refreshUserInterface];
-    
+
     NSOperatingSystemVersion minRequiredVersion = (NSOperatingSystemVersion){10,10,0}; // Yosemite
     NSString* minRequiredVersionString = @"10.10 (Yosemite)";
 	if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: minRequiredVersion]) {
