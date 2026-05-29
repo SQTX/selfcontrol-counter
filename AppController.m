@@ -362,8 +362,12 @@
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    // For test runs, we don't want to pop up the dialog to move to the Applications folder, as it breaks the tests
-    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] == nil) {
+    // For test runs, we don't want to pop up the dialog to move to the Applications folder, as it breaks the tests.
+    // We also skip it for local dev builds running out of DerivedData, where moving + relaunching detaches the
+    // debugger and looks like a hang/crash.
+    NSString* bundlePath = NSBundle.mainBundle.bundlePath;
+    BOOL runningFromBuildDir = [bundlePath containsString: @"/DerivedData/"] || [bundlePath containsString: @"/Build/Products/"];
+    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] == nil && !runningFromBuildDir) {
         PFMoveToApplicationsFolderIfNecessary();
     }
 }
