@@ -3606,7 +3606,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# buildNumber=$(xcodebuild -project SelfControl.xcodeproj/ -showBuildSettings | grep \"CURRENT_PROJECT_VERSION\" | sed 's/[ ]*CURRENT_PROJECT_VERSION = //')\necho \"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\" > \"${PROJECT_DIR}/version-header.h\"\n";
+			shellScript = "NEW=\"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\"\nF=\"${PROJECT_DIR}/version-header.h\"\nif [ \"$(cat \"$F\" 2>/dev/null)\" != \"$NEW\" ]; then\n  echo \"$NEW\" > \"$F\"\nfi\n";
 		};
 		CB5E5FF81C3A5FD10038F331 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3636,7 +3636,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\" > \"${PROJECT_DIR}/version-header.h\"\n";
+			shellScript = "NEW=\"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\"\nF=\"${PROJECT_DIR}/version-header.h\"\nif [ \"$(cat \"$F\" 2>/dev/null)\" != \"$NEW\" ]; then\n  echo \"$NEW\" > \"$F\"\nfi\n";
 		};
 		CB81A92E25B7B4B8006956F7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3653,7 +3653,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\" > \"${PROJECT_DIR}/version-header.h\"\n";
+			shellScript = "NEW=\"#define SELFCONTROL_VERSION_STRING @\\\"${MARKETING_VERSION}\\\"\"\nF=\"${PROJECT_DIR}/version-header.h\"\nif [ \"$(cat \"$F\" 2>/dev/null)\" != \"$NEW\" ]; then\n  echo \"$NEW\" > \"$F\"\nfi\n";
 		};
 		D76E3B7390CC3DD10C32CD7F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
