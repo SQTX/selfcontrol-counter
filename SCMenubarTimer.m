@@ -64,18 +64,20 @@
 }
 
 - (NSImage*)menubarIcon {
-    NSImage* icon = [NSImage imageNamed: @"TemplateIcon2x"];
-    if (icon == nil) icon = [NSImage imageNamed: @"SelfControlIcon"];
+    // Use the real SelfControl app icon (not a template). The icon is a filled
+    // rounded square, so rendering it as a monochrome template produced an
+    // unrecognizable solid blob. A small colored copy reads as the actual logo.
+    NSImage* icon = [NSImage imageNamed: @"SelfControlIcon"];
     if (icon == nil) icon = [NSApp applicationIconImage];
 
     NSImage* sized = [icon copy];
     [sized setSize: NSMakeSize(18.0, 18.0)];
-    [sized setTemplate: YES];
+    [sized setTemplate: NO];
     return sized;
 }
 
 + (NSString*)displayStringForSecondsRemaining:(NSTimeInterval)seconds {
-    if (seconds <= 0) return @"";
+    if (seconds <= 0) return @"0m";
 
     NSInteger totalMinutes = (NSInteger)ceil(seconds / 60.0);
     NSInteger hours = totalMinutes / 60;

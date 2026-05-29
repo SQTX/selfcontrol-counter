@@ -11,9 +11,9 @@
 
 @implementation SCMenubarTimerTests
 
-- (void)testZeroAndNegativeShowsEmpty {
-    XCTAssertEqualObjects([SCMenubarTimer displayStringForSecondsRemaining: 0], @"");
-    XCTAssertEqualObjects([SCMenubarTimer displayStringForSecondsRemaining: -10], @"");
+- (void)testZeroAndNegativeShowsZeroMinutes {
+    XCTAssertEqualObjects([SCMenubarTimer displayStringForSecondsRemaining: 0], @"0m");
+    XCTAssertEqualObjects([SCMenubarTimer displayStringForSecondsRemaining: -10], @"0m");
 }
 
 - (void)testRoundsUpToWholeMinute {
