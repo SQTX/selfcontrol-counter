@@ -31,6 +31,7 @@
 #import "SCXPCClient.h"
 #import "SCBlockFileReaderWriter.h"
 #import "SCUIUtilities.h"
+#import "SCMenubarTimer.h"
 #import <TransformerKit/NSValueTransformer+TransformerKit.h>
 
 @interface AppController () {}
@@ -268,6 +269,8 @@
     editBlocklistButton_.title = editListString;
     editBlocklistMenuItem_.title = editListString;
 
+    [self updateMenubarTimerVisibility];
+
 	[refreshUILock_ unlock];
 }
 
@@ -313,6 +316,27 @@
 - (void)closeTimerWindow {
 	[timerWindowController_ close];
 	timerWindowController_ = nil;
+}
+
+- (void)updateMenubarTimerVisibility {
+    // UI updates are for the main thread only
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateMenubarTimerVisibility];
+        });
+        return;
+    }
+
+    if (blockIsOn && [defaults_ boolForKey: @"ShowMenubarTimer"]) {
+        [menubarTimer_ show];
+    } else {
+        [menubarTimer_ hide];
+    }
+}
+
+- (void)menubarTimerClicked:(id)sender {
+    [self showTimerWindow];
+    [NSApp activateIgnoringOtherApps: YES];
 }
 
 - (IBAction)openPreferences:(id)sender {
@@ -417,8 +441,16 @@
     
     blocklistTeaserLabel_.stringValue = [SCUIUtilities blockTeaserStringWithMaxLength: 60];
 
+	// Create the menu bar countdown timer and keep it in sync with the prefs toggle
+	menubarTimer_ = [[SCMenubarTimer alloc] initWithTarget: self
+	                                                action: @selector(menubarTimerClicked:)];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+	                                         selector: @selector(updateMenubarTimerVisibility)
+	                                             name: NSUserDefaultsDidChangeNotification
+	                                           object: nil];
+
 	[self refreshUserInterface];
-    
+
     NSOperatingSystemVersion minRequiredVersion = (NSOperatingSystemVersion){10,10,0}; // Yosemite
     NSString* minRequiredVersionString = @"10.10 (Yosemite)";
 	if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: minRequiredVersion]) {

@@ -22,6 +22,7 @@
 
 // Forward declaration to avoid compiler weirdness
 @class TimerWindowController;
+@class SCMenubarTimer;
 
 #import <Cocoa/Cocoa.h>
 #import "DomainListWindowController.h"
@@ -53,6 +54,7 @@
 	NSLock* refreshUILock_;
 	BOOL blockIsOn;
 	BOOL addingBlock;
+	SCMenubarTimer* menubarTimer_;
 }
 
 @property (assign) BOOL addingBlock;
