@@ -337,8 +337,14 @@
 }
 
 - (void)menubarTimerClicked:(id)sender {
-    [self showTimerWindow];
     [NSApp activateIgnoringOtherApps: YES];
+    // While a block is running, show the countdown timer window; otherwise show
+    // the normal initial window with the duration slider (not the "Finishing" timer).
+    if ([SCUIUtilities blockIsRunning]) {
+        [self showTimerWindow];
+    } else {
+        [initialWindow_ makeKeyAndOrderFront: self];
+    }
 }
 
 - (IBAction)openPreferences:(id)sender {
