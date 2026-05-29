@@ -21,17 +21,11 @@
 }
 
 - (NSString *)formatSeconds:(NSTimeInterval)seconds {
-    NSString* formatted;
-
-    BOOL useModernBehavior = (NSAppKitVersionNumber >= NSAppKitVersionNumber10_8);
-    if (useModernBehavior) {
-        formatted = [self formatSecondsUsingModernBehavior:seconds];
-    }
-    else {
-        formatted = [self formatSecondsUsingLegacyBehavior:seconds];
-    }
-
-    return formatted;
+    // Use our self-contained, app-localized formatter rather than FormatterKit's
+    // TTTTimeIntervalFormatter. FormatterKit loads unit strings ("min"/"minutes")
+    // from a localization-pruned bundle and returns nil for unsupported locales
+    // (e.g. AppleLanguages containing pl/nb), producing "52 (null)" or crashing.
+    return [self formatSecondsUsingLegacyBehavior:seconds];
 }
 
 - (NSString *)formatSecondsUsingModernBehavior:(NSTimeInterval)seconds
