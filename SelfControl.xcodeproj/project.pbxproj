@@ -2924,6 +2924,7 @@
 				CB5E5FF81C3A5FD10038F331 /* ShellScript */,
 				CB81AB2725B7EFA4006956F7 /* Embed Frameworks */,
 				BED0609C15A860C955A3552D /* [CP] Embed Pods Frameworks */,
+				96AE7ECDC197E4C64EA5D72E /* Compile MASPreferences nib (static-pod resource workaround) */,
 			);
 			buildRules = (
 			);
@@ -3524,6 +3525,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		96AE7ECDC197E4C64EA5D72E /* Compile MASPreferences nib (static-pod resource workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Compile MASPreferences nib (static-pod resource workaround)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# CocoaPods static linkage does not copy MASPreferences resources, so its\n# window nib is missing from the app and MASPreferencesWindowController crashes\n# with \"Invalid parameter not satisfying: windowNibPath\". Compile it directly.\nSRC=\"${SRCROOT}/Pods/MASPreferences/Framework/en.lproj/MASPreferencesWindow.xib\"\nDEST_DIR=\"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"${DEST_DIR}\"\nibtool --errors --warnings --output-format human-readable-text --compile \"${DEST_DIR}/MASPreferencesWindow.nib\" \"${SRC}\"\n";
 		};
 		AF328C5935C794FB31FCD1B5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
